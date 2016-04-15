@@ -3,7 +3,7 @@ use std::io::{self, Read, Write};
 use std::process::exit;
 use std::{env, ffi};
 
-fn prepend(stdin_buffer: &String, file: &ffi::OsString) -> io::Result<()> {
+fn prepend(stdin_buffer: &Vec<u8>, file: &ffi::OsString) -> io::Result<()> {
     let mut openfile = try!{
         OpenOptions::new()
             .read(true)
@@ -12,12 +12,12 @@ fn prepend(stdin_buffer: &String, file: &ffi::OsString) -> io::Result<()> {
             .open(file)
     };
 
-    let mut file_buffer = String::new();
-    try!(openfile.read_to_string(&mut file_buffer));
+    let mut file_buffer: Vec<u8> = Vec::new();
+    try!(openfile.read_to_end(&mut file_buffer));
 
     try!(openfile.set_len(0));
-    try!(openfile.write(stdin_buffer.as_bytes()));
-    try!(openfile.write(file_buffer.as_bytes()));
+    try!(openfile.write_all(&stdin_buffer));
+    try!(openfile.write_all(&file_buffer));
 
     Ok(())
 }
@@ -28,8 +28,8 @@ fn main() {
         exit(1);
     }
 
-    let mut stdin_buffer = String::new();
-    if let Err(e) = io::stdin().read_to_string(&mut stdin_buffer) {
+    let mut stdin_buffer: Vec<u8> = Vec::new();
+    if let Err(e) = io::stdin().read_to_end(&mut stdin_buffer) {
         println!("Failed to read from stdin: {}", e);
         exit(1);
     }
