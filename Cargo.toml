@@ -1,0 +1,8 @@
+[package]
+name = "prepend"
+version = "0.1.0"
+authors = ["Adam <sector-f on github>"]
+
+[[bin]]
+name = "prepend"
+path = "src/prepend.rs"
