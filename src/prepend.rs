@@ -44,15 +44,9 @@ fn main() {
         exit(1);
     }
 
-    let mut files_vec: Vec<ffi::OsString> = Vec::new();
+    let files_vec: Vec<ffi::OsString> = env::args_os().skip(1).filter(|f| can_write(f)).collect();
 
-    for file in env::args_os().skip(1) {
-        if can_write(&file) {
-            files_vec.push(file);
-        }
-    }
-
-    if files_vec.len() == 0 {
+    if files_vec.is_empty() {
         exit(1);
     }
 
