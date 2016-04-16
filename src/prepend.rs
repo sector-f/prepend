@@ -23,15 +23,12 @@ fn prepend(stdin_buffer: &[u8], file: &ffi::OsStr) -> io::Result<()> {
 }
 
 fn can_write(file: &ffi::OsStr) -> bool {
-    if let Err(e) = OpenOptions::new()
+    OpenOptions::new()
             .write(true)
             .create(true)
-            .open(file) {
-                    print_error(format!("Writing to file {} failed: {}\n", file.to_string_lossy(), e));
-                    false
-            } else {
-                true
-            }
+            .open(file)
+            .map_err(|e| print_error(format!("Writing to file {} failed: {}\n", file.to_string_lossy(), e)))
+            .is_ok()
 }
 
 fn print_error(error: String) {
