@@ -3,7 +3,7 @@ use std::io::{self, Read, Write};
 use std::process::exit;
 use std::{env, ffi};
 
-fn prepend(stdin_buffer: &Vec<u8>, file: &ffi::OsString) -> io::Result<()> {
+fn prepend(stdin_buffer: &[u8], file: &ffi::OsStr) -> io::Result<()> {
     let mut openfile = try!{
         OpenOptions::new()
             .read(true)
@@ -22,7 +22,7 @@ fn prepend(stdin_buffer: &Vec<u8>, file: &ffi::OsString) -> io::Result<()> {
     Ok(())
 }
 
-fn can_write(file: &ffi::OsString) -> bool {
+fn can_write(file: &ffi::OsStr) -> bool {
     if let Err(e) = OpenOptions::new()
             .write(true)
             .create(true)
