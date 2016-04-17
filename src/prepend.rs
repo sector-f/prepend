@@ -53,8 +53,10 @@ fn print_error(error: String) {
 }
 
 fn main() {
+    let mut exitcode: i32 = 0;
+
     let matches = App::new("prepend")
-        .version("2.0.0")
+        .version("2.1.0")
         .about("Prepends data to a file")
         .arg(Arg::with_name("tee")
              .short("t")
@@ -67,16 +69,23 @@ fn main() {
              .help("File(s) to prepend data to"))
         .get_matches();
 
-    let files_vec: Vec<_> = matches.values_of_os("FILE").unwrap().filter(|f| can_write(f)).collect();
+    let mut files_vec: Vec<_> = Vec::new();
+    for file in matches.values_of_os("FILE").unwrap() {
+        if can_write(&file) {
+            files_vec.push(file);
+        } else {
+            exitcode = 3;
+        }
+    }
 
     if files_vec.is_empty() {
-        exit(1);
+        exit(2);
     }
 
     let mut stdin_buffer: Vec<u8> = Vec::new();
     if let Err(e) = io::stdin().read_to_end(&mut stdin_buffer) {
         print_error(format!("Failed to read from stdin: {}\n", e));
-        exit(1);
+        exit(3);
     }
 
     for file in files_vec {
@@ -85,10 +94,16 @@ fn main() {
                 if matches.is_present("tee") {
                     if let Err(e) = print_to_stdout(&file) {
                         print_error(format!("Printing to stdout failed for file {}: {}\n", file.to_string_lossy(), e));
+                        exitcode = 3;
                     }
                 }
             },
-            Err(e) => print_error(format!("Writing to file {} failed: {}\n", file.to_string_lossy(), e)),
+            Err(e) => {
+                print_error(format!("Writing to file {} failed: {}\n", file.to_string_lossy(), e));
+                exitcode = 3;
+            },
         }
     }
+
+    exit(exitcode);
 }
