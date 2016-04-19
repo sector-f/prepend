@@ -1,6 +1,6 @@
-% PREPEND(1) 2.1.1
+% PREPEND(1) 2.1.2
 %
-% 2016-04-18
+% 2016-04-19
 
 NAME
 ====
@@ -18,19 +18,17 @@ DESCRIPTION
 ===========
 
 **prepend**, as the name suggests, prepends data to files.
-Data is read from standard input and stored in a buffer until EOF is reached.
-*FILE* is then read into a separate buffer until EOF. *FILE* is then
-truncated to zero length, and the standard input buffer and *FILE*'s
-original contents are then written to *FILE*. This is performed
-for each specified *FILE*, in the order in which they were specified.
+Data is read from standard input until EOF and is then added to the
+beginning of each *FILE*. Standard output is unused unless **--tee**
+is specified. Standard error is used only for error messages.
 
 OPTIONS
 =======
 
 -t, --tee
 
-:	Prints the contents of *FILE* to stdout after prepending data;
-	if more than one *FILE* was specified, the new contents of
+:	Prints the contents of *FILE* to stdout after prepending data.
+	If more than one *FILE* was specified, the new contents of
 	each *FILE* is printed in the order in which the *FILE*s were listed
 
 -h, --help
@@ -52,7 +50,8 @@ Prepend the contents of foo.txt to bar.txt:
 
 	prepend bar.txt < foo.txt
 
-Check every .sh file in the current directory for a shebang, and prepend '#!/usr/bin/env bash' to the file if none is found:
+Check every .sh file in the current directory for a shebang,
+and prepend '#!/usr/bin/env bash' to the file if none is found:
 
 ~~~
 for file in ./*.sh; do
@@ -65,11 +64,17 @@ done
 DIAGNOSTICS
 ===========
 
-The error message that is most likely to be displayed is "Writing to file FILE failed: CAUSE", with CAUSE being something like "Permission denied" or "Is a directory." These errors should be fairly self-explanatory.
+The error message that is most likely to be displayed
+during normal usage is "Writing to file *FILE* failed: CAUSE",
+with CAUSE being something like "Permission denied" or
+"Is a directory". These errors should be self-explanatory.
+
+Invalid usage will result in an error message
+detailing how the usage was incorrect.
 
 Other error messages may be displayed if I/O errors occur.
 
-EXIT VALUES
+EXIT STATUS
 ===========
 
 0
@@ -88,21 +93,27 @@ EXIT VALUES
 
 :	Other errors occurred
 
-WARNING
-=======
+
+BUGS
+====
+
+Potential for Data Loss
+-------
 
 Because **prepend** functions by truncating the *FILE*(s) to zero length before
-writing data, data loss is possible if the program is killed
+writing data, data loss is possible if **prepend** is killed
 or interrupted. However, this is a small risk, equivalent
 to the chance of data loss occurring when using a shell to redirect
 the output of a command to a file.
 
-BUGS
-====
+Reporting Bugs
+--------------
 
 Any bugs should be reported to <https://github.com/sector-f/prepend/issues>
 
 SEE ALSO
 ========
 
-Source code can be found at <https://github.com/sector-f/prepend>
+awk(1) and sed(1) for more-powerful text editing
+
+Source code for **prepend** can be found at <https://github.com/sector-f/prepend>
