@@ -1,4 +1,4 @@
-% PREPEND(1) 2.1.2
+% PREPEND(1) 2.1.3
 %
 % 2016-04-19
 
@@ -110,6 +110,12 @@ Reporting Bugs
 --------------
 
 Any bugs should be reported to <https://github.com/sector-f/prepend/issues>
+
+COPYRIGHT
+=========
+
+Copyright (C) 2016, Adam Simeth. This software is licensed under the 3-clause BSD license; you should have received a copy of the license with this software. A copy of this license can be found at
+<https://raw.githubusercontent.com/sector-f/prepend/master/LICENSE>
 
 SEE ALSO
 ========
