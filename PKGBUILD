@@ -1,11 +1,11 @@
 # Maintainer: Adam <sector-f on github>
 pkgname=prepend
 pkgver=2.1.3
-pkgrel=1
+pkgrel=2
 pkgdesc="CLI utility that prepends data to a file"
 arch=('any')
 url="https://github.com/sector-f/prepend"
-license=('unknown')
+license=('BSD')
 provides=($pkgname)
 conflicts=($pkgname)
 makedepends=('rust' 'cargo')
