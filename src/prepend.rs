@@ -1,8 +1,9 @@
 extern crate clap;
+extern crate libc;
 
+use std::process::exit;
 use std::fs::OpenOptions;
 use std::io::{self, Read, Write};
-use std::process::exit;
 use std::ffi;
 use clap::{App, Arg};
 
@@ -56,7 +57,7 @@ fn main() {
     let mut exitcode: i32 = 0;
 
     let matches = App::new("prepend")
-        .version("2.1.3")
+        .version("2.2.0")
         .about("Prepends data to a file")
         .arg(Arg::with_name("tee")
              .short("t")
@@ -69,12 +70,19 @@ fn main() {
              .help("File(s) to prepend data to"))
         .get_matches();
 
+    unsafe {
+        if libc::fcntl(0, libc::F_GETFD) != 0 {
+            print_error(format!("Failed to read from stdin\n"));
+            exit(3);
+        }
+    }
+
     let mut files_vec: Vec<_> = Vec::new();
     for file in matches.values_of_os("FILE").unwrap() {
         if can_write(&file) {
             files_vec.push(file);
         } else {
-            exitcode = 3;
+            exitcode = 4;
         }
     }
 
@@ -94,13 +102,13 @@ fn main() {
                 if matches.is_present("tee") {
                     if let Err(e) = print_to_stdout(&file) {
                         print_error(format!("Printing to stdout failed for file {}: {}\n", file.to_string_lossy(), e));
-                        exitcode = 3;
+                        exitcode = 4;
                     }
                 }
             },
             Err(e) => {
                 print_error(format!("Writing to file {} failed: {}\n", file.to_string_lossy(), e));
-                exitcode = 3;
+                exitcode = 4;
             },
         }
     }

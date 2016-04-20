@@ -1,4 +1,4 @@
-% PREPEND(1) 2.1.3
+% PREPEND(1) 2.2.0
 %
 % 2016-04-19
 
@@ -91,6 +91,10 @@ EXIT STATUS
 
 3
 
+:	Error reading from standard input
+
+4
+
 :	Other errors occurred
 
 
@@ -109,7 +113,7 @@ the output of a command to a file.
 Reporting Bugs
 --------------
 
-Any bugs should be reported to <https://github.com/sector-f/prepend/issues>
+Any bugs found should be reported to <https://github.com/sector-f/prepend/issues>
 
 COPYRIGHT
 =========
