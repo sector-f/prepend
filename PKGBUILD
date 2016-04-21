@@ -1,6 +1,6 @@
 # Maintainer: Adam <sector-f on github>
 pkgname=prepend
-pkgver=2.2.0
+pkgver=2.2.1-alpha
 pkgrel=1
 pkgdesc="CLI utility that prepends data to a file"
 arch=('any')
