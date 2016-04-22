@@ -1,11 +1,11 @@
 [package]
 name = "prepend"
-version = "2.2.1-alpha.1"
+version = "2.2.1"
 authors = ["Adam <sector-f on github>"]
 
 [dependencies]
-clap = "*"
-libc = "*"
+clap = "2.*"
+libc = "0.2.10"
 
 [[bin]]
 name = "prepend"

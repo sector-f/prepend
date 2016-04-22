@@ -57,7 +57,7 @@ fn main() {
     let mut exitcode = 0;
 
     let matches = App::new("prepend")
-        .version("2.2.1-alpha.1")
+        .version("2.2.1")
         .about("Prepends data to a file")
         .arg(Arg::with_name("tee")
              .short("t")
